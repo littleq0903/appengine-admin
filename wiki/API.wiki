@@ -1,4 +1,5 @@
 #summary Application Programming Interface documentation
+#labels Featured
 
 = Python package name =
 
