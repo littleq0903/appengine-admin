@@ -1,0 +1,113 @@
+#summary Application Programming Interface documentation
+
+= Python package name =
+
+To use Appengine Admin [http://code.google.com/p/appengine-admin/source/checkout check it out] via [http://subversion.tigris.org/ Subversion] using `appengine_admin` as directory name.
+
+Import Appengine Admin into your scripts:
+{{{
+import appengine_admin
+}}}
+
+= Compatibility =
+Appengine Admin is compatible with Python 2.4 and more recent Python 2.x versions.
+
+= Available objects =
+Classes:
+  * ModelAdmin
+  * Admin
+Functions:
+  * register
+  * getModelAdmin
+
+= Classes =
+== ModelAdmin ==
+Use this class as base for your model registration to admin site.
+
+Available settings:
+  * model - db.model derived class that describes your data model
+  * listFields - list of field names that should be shown in list view
+  * editFields - list of field names that that should be used as editable fields in admin interface
+  * readonlyFields - list of field names that should be used as read-only fields in admin interface
+  * listGql - GQL statement for record ordering/filtering/whatever_else in list view
+
+Sample usage:
+{{{
+from google.appengine.ext import db
+import appengine_admin
+
+class Article(db.Model):
+    """Your data model
+    """
+    title = db.StringProperty("Title", required = True)
+    content = db.TextProperty("Content", required = True)
+    whencreated = db.DateTimeProperty("Created", auto_now_add = True)
+    whenupdated = db.DateTimeProperty("Updated", auto_now = True)
+
+class AdminArticle(appengine_admin.ModelAdmin):
+    """Appengine Admin settings for the model
+    """
+    model = Article
+    listFields = ('title', 'whencreated', 'whenupdated')
+    editFields = ('title', 'content')
+    readonlyFields = ('whencreated', 'whenupdated')
+    listGql = 'order by whencreated desc'
+}}}
+
+== Admin ==
+Use this class as view in your URL scheme definitions.
+Admin class is derived from `google.appengine.ext.webapp.RequestHandler` so it contains every property and method that is available for `google.appengine.ext.webapp.RequestHandler`
+
+Additional instance properties:
+  * models - Aplphabetically sorted list of registered models
+  * urlPrefix - URL prefix that is set for Appengine Admin urls, e.g. "/admin".
+Additional methods:
+  * index_get
+  Show Appengine Admin start page
+  * new_get
+  Attribute: modelName
+
+  Show form for creating new record of particular model
+  * new_post
+  Attribute: modelName
+
+  Create new record of particular model
+  * edit_get
+  Attributes: modelName, key
+
+  Show for for editing existing record of particular model.
+  * edit_post
+  Attributes: modelName, key
+
+  Save details for already existing record of particular model.
+  * delete_get
+  Attributes: modelName, key
+
+  Delete record of particular model.
+
+Sample usage:
+{{{
+from google.appengine.ext import webapp
+
+application = webapp.WSGIApplication([
+    ...
+    # Admin pages
+    (r'^(/admin)(.*)$', appengine_admin.Admin),
+    ...
+])
+}}}
+
+= Functions =
+  * register
+Attributes: Classes (not class instances or objects!) that are derived from ModelAdmin.
+  
+Registers ModelAdmin instance for corresponding model.
+Only one ModelAdmin instance per model can be active.
+In case if more ModelAdmin instances with same model are registered last registered instance will be the active one.
+
+Sample usage:
+{{{
+import appengine_admin
+
+appengine_admin.register(AdminArticle)
+}}}
