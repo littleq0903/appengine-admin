@@ -5,7 +5,7 @@
 The usage is as simple as this:
   # Check out Appengine Admin via SVN:
 {{{
-svn checkout http://appengine-admin.googlecode.com/svn/trunk/ appengine-admin
+svn checkout http://appengine-admin.googlecode.com/svn/trunk/ appengine_admin
 }}}
   # Put it into your GAE application root directory
   # Modify your application to include admin page URL's:  
