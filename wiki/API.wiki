@@ -15,14 +15,14 @@ Appengine Admin is compatible with Python 2.4 and more recent Python 2.x version
 
 = Available objects =
 Classes:
-  * ModelAdmin
+  * !ModelAdmin
   * Admin
 Functions:
   * register
   * getModelAdmin
 
 = Classes =
-== ModelAdmin ==
+== !ModelAdmin ==
 Use this class as base for your model registration to admin site.
 
 Available settings:
@@ -104,7 +104,7 @@ Attributes: Classes (not class instances or objects!) that are derived from Mode
   
 Registers ModelAdmin instance for corresponding model.
 Only one ModelAdmin instance per model can be active.
-In case if more ModelAdmin instances with same model are registered last registered instance will be the active one.
+In case if more !ModelAdmin instances with same model are registered last registered instance will be the active one.
 
 Sample usage:
 {{{
