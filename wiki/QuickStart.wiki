@@ -43,7 +43,7 @@ class Article(db.Model):
     whenupdated = db.DateTimeProperty("Updated", auto_now = True)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 class Comment(db.Model):
     article = db.ReferenceProperty(Article, verbose_name = "Article")
