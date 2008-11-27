@@ -6,8 +6,15 @@
   * Create new records
   * Update/edit records
   * Delete records
-  * Supported model property types:
-    * All that are available for Google App Engine
+  * Supported and tested model property types:
+    * StringProperty
+    * IntegerProperty
+    * FloatProperty
+    * DateTimeProperty
+    * DateProperty
+    * TimeProperty
+    * ReferenceProperty
+    * TextProperty
   * These property types have custom widgets:
     * Any property with `choices`: dropdown list
     * !TextProperty - Textarea
