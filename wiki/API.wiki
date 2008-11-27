@@ -112,3 +112,35 @@ import appengine_admin
 
 appengine_admin.register(AdminArticle)
 }}}
+
+= Tips and tricks =
+== `__str__` for model classes ==
+Define `__str__` method for your model classes as Appengine Admin uses it when displaying choices for referenced field in _edit_ and _new_ views.
+
+Sample usage:
+{{{
+class Article(db.Model):
+    """Your data model
+    """
+    title = db.StringProperty("Title", required = True)
+    content = db.TextProperty("Content", required = True)
+
+    def __str__(self):
+        return self.title
+}}}
+== verbose_name ==
+Appengine Admin makes use of [http://code.google.com/appengine/docs/datastore/propertyclass.html#Property verbose_name] setting of your model properties to create labels for fields in Appengine Admin panel.
+
+Sample usage:
+{{{
+class Article(db.Model):
+    """Your data model
+    """
+    title = db.StringProperty("Title", required = True)
+    content = db.TextProperty("Content", required = True)
+
+class Comment(db.Model):
+    article = db.ReferenceProperty(Article, verbose_name = "Article")
+    author = db.StringProperty("Author", required = True)
+    content = db.TextProperty("Content", required = True)
+}}}
