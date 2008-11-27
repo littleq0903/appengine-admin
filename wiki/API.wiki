@@ -26,7 +26,7 @@ Functions:
 Use this class as base for your model registration to admin site.
 
 Available settings:
-  * model - google.appengine.ext.db.model derived class that describes your data model
+  * model - `google.appengine.ext.db.model` derived class that describes your data model
   * listFields - list of field names that should be shown in list view
   * editFields - list of field names that that should be used as editable fields in admin interface
   * readonlyFields - list of field names that should be used as read-only fields in admin interface
