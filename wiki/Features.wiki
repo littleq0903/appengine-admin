@@ -1,0 +1,14 @@
+#summary Appengine Admin features.
+#labels Featured
+
+= Implemented features =
+  * List records for each registered model
+  * Create new records
+  * Update/edit records
+  * Delete records
+  * Supported model property types:
+    * All that are available for Google App Engine
+  * These property types have custom widgets:
+    * Any property with `choices`: dropdown list
+    * !TextProperty - Textarea
+    * !ReferenceProperty - dropdown list of existing records
