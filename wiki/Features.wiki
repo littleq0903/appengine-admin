@@ -7,15 +7,29 @@
   * Update/edit records
   * Delete records
   * Supported and tested model property types:
-    * StringProperty
-    * IntegerProperty
-    * FloatProperty
-    * DateTimeProperty
-    * DateProperty
-    * TimeProperty
-    * ReferenceProperty
-    * TextProperty
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#StringProperty StringProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#IntegerProperty IntegerProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#FloatProperty FloatProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateTimeProperty DateTimeProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#ReferenceProperty ReferenceProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TextProperty TextProperty]
+  * Not tested but should be usable without additional patches:
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BooleanProperty BooleanProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateProperty DateProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TimeProperty TimeProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#UserProperty UserProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#CategoryProperty CategoryProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#LinkProperty LinkProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#EmailProperty EmailProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#IMProperty IMProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#PhoneNumberProperty PhoneNumberProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#PostalAddressProperty PostalAddressProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#RatingProperty RatingProperty]
   * These property types have custom widgets:
     * Any property with `choices`: dropdown list
-    * !TextProperty - Textarea
-    * !ReferenceProperty - dropdown list of existing records
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TextProperty TextProperty] - Textarea
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#ReferenceProperty ReferenceProperty] - dropdown list of existing records
+  * These property types need some additional work in Appengine Admin to be really usable
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BlobProperty BlobProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#SelfReferenceProperty SelfReferenceProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#GeoPtProperty GeoPtProperty]
