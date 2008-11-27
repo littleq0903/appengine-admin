@@ -42,6 +42,9 @@ class Article(db.Model):
     whencreated = db.DateTimeProperty("Created", auto_now_add = True)
     whenupdated = db.DateTimeProperty("Updated", auto_now = True)
 
+    def __str__(self):
+        return self.title
+
 class Comment(db.Model):
     article = db.ReferenceProperty(Article, verbose_name = "Article")
     author = db.StringProperty("Author", required = True)
