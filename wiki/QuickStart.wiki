@@ -12,6 +12,7 @@ svn checkout http://appengine-admin.googlecode.com/svn/trunk/ appengine_admin
 {{{
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
+import appengine_admin
 
 application = webapp.WSGIApplication([
     ...
