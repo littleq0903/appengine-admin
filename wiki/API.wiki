@@ -126,7 +126,7 @@ class Article(db.Model):
     content = db.TextProperty("Content", required = True)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 }}}
 == verbose_name ==
 Appengine Admin makes use of [http://code.google.com/appengine/docs/datastore/propertyclass.html#Property verbose_name] setting of your model properties to create labels for fields in Appengine Admin panel.
