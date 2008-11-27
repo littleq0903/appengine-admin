@@ -100,7 +100,7 @@ application = webapp.WSGIApplication([
 
 = Functions =
   * register
-Attributes: Classes (not class instances or objects!) that are derived from ModelAdmin.
+Attributes: Classes (not class instances or objects!) that are derived from !ModelAdmin.
   
 Registers !ModelAdmin instance for corresponding model.
 Only one !ModelAdmin instance per model can be active.
