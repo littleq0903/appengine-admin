@@ -1,4 +1,9 @@
 #summary Appengine Admin screenshots
 = Admin index page =
+http://code.google.com/p/appengine-admin/source/browse/wiki/images/screenshots/index_view.png
+
 = Admin list view =
+http://code.google.com/p/appengine-admin/source/browse/wiki/images/screenshots/list_view.png
+
 = Admin edit view =
+http://code.google.com/p/appengine-admin/source/browse/wiki/images/screenshots/edit_view.png
