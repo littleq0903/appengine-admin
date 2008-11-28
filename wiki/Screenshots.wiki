@@ -1,0 +1,4 @@
+#summary Appengine Admin screenshots
+= Admin index page =
+= Admin list view =
+= Admin edit view =
