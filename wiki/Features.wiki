@@ -29,6 +29,7 @@
     * Any property with `choices`: dropdown list
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TextProperty TextProperty] - Textarea
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#ReferenceProperty ReferenceProperty] - dropdown list of existing records
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BooleanProperty BooleanProperty] - Checkbox in edit view
   * These property types need some additional work in Appengine Admin to be really usable:
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BlobProperty BlobProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#SelfReferenceProperty SelfReferenceProperty]
