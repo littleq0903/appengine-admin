@@ -1,0 +1,17 @@
+application: bsdradius
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /appengine_admin_media
+  static_dir: appengine_admin/media
+  secure: never
+  
+- url: /gae_admin/.*
+  script: $PYTHON_LIB/google/appengine/ext/admin
+  login: admin
+
+- url: /.*
+  script: urls.py
+
