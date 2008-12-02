@@ -13,8 +13,8 @@
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateTimeProperty DateTimeProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#ReferenceProperty ReferenceProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TextProperty TextProperty]
-  * Not tested but should be usable without additional patches:
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BooleanProperty BooleanProperty]
+  * Not tested but should be usable without additional patches:
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateProperty DateProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TimeProperty TimeProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#UserProperty UserProperty]
