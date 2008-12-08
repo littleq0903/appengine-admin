@@ -6,6 +6,7 @@
   * Create new records
   * Update/edit records
   * Delete records
+  * [PagingListView Paging] of items in Appengine Admin list view
   * Supported and tested model property types:
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#StringProperty StringProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#IntegerProperty IntegerProperty]
