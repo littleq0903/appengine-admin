@@ -129,7 +129,7 @@ class Article(db.Model):
         return str(self.title)
 }}}
 
-If your model's `__str__` method returns text in different encoding than system's default (e.g., latin-1) then use decorator `encoded_str_utf8` for UTF-8 data or `encoded_str(encoding='encoding_name') for any other encoding.
+If your model's `__str__` method returns text in different encoding than system's default (e.g., latin-1) then use decorator `encoded_str_utf8` for UTF-8 data or `encoded_str(encoding='encoding_name')` for any other encoding.
 
 Sample usage:
 {{{
