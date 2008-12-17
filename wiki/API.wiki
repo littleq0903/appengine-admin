@@ -128,6 +128,29 @@ class Article(db.Model):
     def __str__(self):
         return str(self.title)
 }}}
+
+If your model's `__str__` method returns text in different encoding than system's default (e.g., latin-1) then use decorator `encoded_str_utf8` for UTF-8 data or `encoded_str(encoding='encoding_name') for any other encoding.
+
+Sample usage:
+{{{
+from google.appengine.ext import db
+from appengine_admin.encoding import encoded_str, encoded_str_utf8
+
+class ReferencedModel(db.Model):
+    name = db.StringProperty("Name", required = True) # Contains UTF-8 encoded text
+   
+    @encoded_str_utf8
+    def __str__(self):
+        return self.name
+
+class AnotherReferencedModel(d
+    name = db.StringProperty("Name", required = True) # Contains Windows-1257 encoded text
+   
+    @encoded_str(encoding = 'windows-1257')
+    def __str__(self):
+        return self.name
+}}}
+
 == verbose_name ==
 Appengine Admin makes use of [http://code.google.com/appengine/docs/datastore/propertyclass.html#Property verbose_name] setting of your model properties to create labels for fields in Appengine Admin panel.
 
