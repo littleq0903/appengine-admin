@@ -11,7 +11,7 @@ import appengine_admin
 }}}
 
 = Compatibility =
-Appengine Admin is compatible with Python 2.4 and more recent Python 2.x versions.
+Appengine Admin is compatible with Python 2.5 and more recent Python 2.x versions.
 
 = Available objects =
 Classes:
