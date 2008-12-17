@@ -1,6 +1,9 @@
 #summary Application Programming Interface documentation
 #labels Featured
 
+= Contents =
+<wiki:toc max_depth="2" />
+
 = Python package name =
 
 To use Appengine Admin [http://code.google.com/p/appengine-admin/source/checkout check it out] via [http://subversion.tigris.org/ Subversion] using `appengine_admin` as directory name.
@@ -114,7 +117,7 @@ appengine_admin.register(AdminArticle)
 }}}
 
 = Tips and tricks =
-== `__str__` for model classes ==
+== String represenatation of model instances ==
 Define `__str__` method for your model classes as Appengine Admin uses it when displaying choices for referenced field in _edit_ and _new_ views.
 
 Sample usage:
