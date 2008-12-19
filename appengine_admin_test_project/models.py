@@ -38,3 +38,19 @@ class TestModel(db.Model):
     def __unicode__(self):
         return self.stringField
 
+
+class BaseTestModel(db.Model):
+    stringField = db.StringProperty("String field in base class")
+    
+class DerivedTestModel(BaseTestModel):
+    textField = db.TextProperty("Text field in derived class")
+    
+class DerivedTestModel2(DerivedTestModel):
+    booleanField = db.BooleanProperty("Boolean field in derived class")
+    
+class BaseTestModel2(db.Model):
+    whencreated = db.DateTimeProperty("Created", auto_now_add = True)
+    whenupdated = db.DateTimeProperty("Updated", auto_now = True)
+    
+class DerivedTestModel3(BaseTestModel2, DerivedTestModel2):
+    pass

@@ -77,11 +77,30 @@ class AdminUtf8ReferencedModel(appengine_admin.ModelAdmin):
     editFields = ('name',)
     readonlyFields = ('whencreated', 'whenupdated')
     listGql = 'order by name'
+
+class AdminDerivedTestModel(appengine_admin.ModelAdmin):
+    model = models.DerivedTestModel
+    listFields = ('stringField',)
+    editFields = ('stringField', 'textField')
+    
+class AdminDerivedTestModel2(appengine_admin.ModelAdmin):
+    model = models.DerivedTestModel2
+    listFields = ('stringField', 'booleanField')
+    editFields = ('stringField', 'textField', 'booleanField')
+
+class AdminDerivedTestModel3(appengine_admin.ModelAdmin):
+    model = models.DerivedTestModel3
+    listFields = ('stringField', 'booleanField', 'whencreated', 'whenupdated')
+    editFields = ('stringField', 'textField', 'booleanField')
+    readonlyFields = ('whencreated', 'whenupdated')
     
 appengine_admin.register(
     AdminTestModel,
     AdminReferencedModel,
     AdminUtf8TestModel,
     AdminUtf8ReferencedModel,
+    AdminDerivedTestModel,
+    AdminDerivedTestModel2,
+    AdminDerivedTestModel3,
 )
 
