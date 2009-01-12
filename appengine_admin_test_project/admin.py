@@ -55,6 +55,7 @@ class AdminUtf8TestModel(appengine_admin.ModelAdmin):
     model = models_utf8.Utf8TestModel
     listFields = (
         'stringField',
+        'testMethod',
         'textField',
         'integerField',
         'booleanField',
@@ -70,7 +71,7 @@ class AdminUtf8TestModel(appengine_admin.ModelAdmin):
         'referenceField',
     )
     readonlyFields = ('whencreated', 'whenupdated')
-    
+
 class AdminUtf8ReferencedModel(appengine_admin.ModelAdmin):
     model = models_utf8.Utf8ReferencedModel
     listFields = ('name', 'whencreated', 'whenupdated')
@@ -82,7 +83,7 @@ class AdminDerivedTestModel(appengine_admin.ModelAdmin):
     model = models.DerivedTestModel
     listFields = ('stringField',)
     editFields = ('stringField', 'textField')
-    
+
 class AdminDerivedTestModel2(appengine_admin.ModelAdmin):
     model = models.DerivedTestModel2
     listFields = ('stringField', 'booleanField')
@@ -93,7 +94,7 @@ class AdminDerivedTestModel3(appengine_admin.ModelAdmin):
     listFields = ('stringField', 'booleanField', 'whencreated', 'whenupdated')
     editFields = ('stringField', 'textField', 'booleanField')
     readonlyFields = ('whencreated', 'whenupdated')
-    
+
 appengine_admin.register(
     AdminTestModel,
     AdminReferencedModel,
@@ -103,4 +104,3 @@ appengine_admin.register(
     AdminDerivedTestModel2,
     AdminDerivedTestModel3,
 )
-
