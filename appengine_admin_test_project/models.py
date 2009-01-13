@@ -47,6 +47,8 @@ class DerivedTestModel(BaseTestModel):
     
 class DerivedTestModel2(DerivedTestModel):
     booleanField = db.BooleanProperty("Boolean field in derived class")
+    blobField = db.BlobProperty()
+    blobField_meta = db.BlobProperty()
     
 class BaseTestModel2(db.Model):
     whencreated = db.DateTimeProperty("Created", auto_now_add = True)
