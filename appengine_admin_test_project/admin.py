@@ -86,7 +86,7 @@ class AdminDerivedTestModel(appengine_admin.ModelAdmin):
 
 class AdminDerivedTestModel2(appengine_admin.ModelAdmin):
     model = models.DerivedTestModel2
-    listFields = ('stringField', 'booleanField')
+    listFields = ('blobField', 'stringField', 'booleanField', 'blobField')
     editFields = ('stringField', 'textField', 'booleanField', 'blobField')
     readonlyFields = ('blobField',)
 
