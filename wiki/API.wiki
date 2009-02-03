@@ -184,7 +184,6 @@ class ModelWithBlobs(db.Model):
     blobField = db.BlobProperty()
     # File name and MIME type will be stored here in as pickled dictionary
     # There's not much point of showing this field in admin interface.
-    # Let it be hidden for your eyes :)
     blobField_meta = db.BlobProperty()
 }}}
 If you don't add this extra field or meta information can not be retrieved for some reason the file MIME type will be set to `application/octet-stream` when you will try to download the file.
