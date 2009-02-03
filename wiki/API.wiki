@@ -170,3 +170,21 @@ class Comment(db.Model):
     author = db.StringProperty("Author", required = True)
     content = db.TextProperty("Content", required = True)
 }}}
+
+== !BlobProperty meta data ==
+If you use !BlobProperty for file storage then it is very comfortable to have name and MIME type of the uploaded file cached somewhere. The correct file name and type will be given to browser when downloading file contents via admin interface.
+
+To store meta data of the uploaded file define additional !BlobProperty field in the same model with name `<original_blob_field_name>_meta`.
+
+Sample usage:
+{{{
+class ModelWithBlobs(db.Model):
+    # Store the file contents here.
+    # Make this field available in admin interface.
+    blobField = db.BlobProperty()
+    # File name and MIME type will be stored here in as pickled dictionary
+    # There's not much point of showing this field in admin interface.
+    # Let it be hidden for your eyes :)
+    blobField_meta = db.BlobProperty()
+}}}
+If you don't add this extra field or meta information can not be retrieved for some reason the file MIME type will be set to `application/octet-stream` when you will try to download the file.
