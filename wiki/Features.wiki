@@ -12,13 +12,11 @@
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#StringProperty StringProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#IntegerProperty IntegerProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#FloatProperty FloatProperty]
-    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateTimeProperty DateTimeProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#ReferenceProperty ReferenceProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TextProperty TextProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BooleanProperty BooleanProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BlobProperty BlobProperty]
   * Not tested but should be usable without additional patches:
-    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateProperty DateProperty]
-    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TimeProperty TimeProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#UserProperty UserProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#CategoryProperty CategoryProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#LinkProperty LinkProperty]
@@ -32,7 +30,10 @@
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TextProperty TextProperty] - Textarea
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#ReferenceProperty ReferenceProperty] - dropdown list of existing records
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BooleanProperty BooleanProperty] - Checkbox in edit view
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BlobProperty BlobProperty] - File upload field; link to already uploaded file.
   * These property types need some additional work in Appengine Admin to be really usable:
-    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#BlobProperty BlobProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateTimeProperty DateTimeProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateProperty DateProperty]
+    * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TimeProperty TimeProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#SelfReferenceProperty SelfReferenceProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#GeoPtProperty GeoPtProperty]
