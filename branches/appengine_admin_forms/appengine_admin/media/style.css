@@ -171,3 +171,12 @@ td.delete_col {
 .error {
     margin-left: 15px;
 }
+
+.errorlist {
+    margin: 5px 5px 0 0;
+    color: red;
+    font-weight: bold;
+}
+.errorlist li {
+    list-style-type: none;
+}
