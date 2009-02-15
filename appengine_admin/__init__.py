@@ -10,9 +10,10 @@ from google.appengine.api import datastore_errors
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.api import datastore_errors
-from google.appengine.ext.db import djangoforms
 
 from . import authorized
+from . import admin_widgets
+from . import admin_forms
 
 # Path to admin template directory
 # Overwrite this variable if you want to use custom templates
@@ -57,10 +58,10 @@ class PropertyWrapper(object):
         if not self.verbose_name:
             self.verbose_name = self.name
         self.value = ''
-    
+
     def __deepcopy__(self, memo):
         return PropertyWrapper(self.prop, self.name)
-        
+
     def __str__(self):
         return "PropertyWrapper (name: %s; type: %s; value: %r)" % (self.name, self.typeName, self.value)
 
@@ -91,7 +92,11 @@ class ModelAdmin(object):
         self._extractProperties(self.listFields, self._listProperties)
         self._extractProperties(self.editFields, self._editProperties)
         self._extractProperties(self.readonlyFields, self._readonlyProperties)
-        self._createAdminForm()
+        self.AdminForm = admin_forms.createAdminForm(
+            formModel = self.model,
+            editFields = self.editFields,
+            editProps = self._editProperties
+        )
 
     def _extractProperties(self, fieldNames, storage):
         for propertyName in fieldNames:
@@ -115,13 +120,7 @@ class ModelAdmin(object):
                 logging.warning('Error catched in ModelAdmin._attachListFields: %s' % exc)
                 prop.value = None
         return item
-        
-    def _createAdminForm(self):
-        class AdminForm(djangoforms.ModelForm):
-            class Meta:
-                model = self.model
-                fields = self.editFields
-        self.AdminForm = AdminForm
+
 
 ## Admin views ##
 class Admin(BaseRequestHandler):
@@ -235,7 +234,7 @@ class Admin(BaseRequestHandler):
                 logging.info("%s :: %s" % (readonlyProperties[i].name, readonlyProperties[i].value))
         return readonlyProperties
 
-        
+
     @authorized.role("admin")
     def index_get(self):
         """Show admin start page
@@ -273,13 +272,13 @@ class Admin(BaseRequestHandler):
         """Show form for creating new record of particular model
         """
         modelAdmin = getModelAdmin(modelName)
-        
+
         templateValues = {
             'models': self.models,
             'urlPrefix': self.urlPrefix,
             'item' : None,
             'moduleTitle': modelAdmin.modelName,
-            'editForm': modelAdmin.AdminForm(),
+            'editForm': modelAdmin.AdminForm(urlPrefix = self.urlPrefix),
             'readonlyProperties': modelAdmin._readonlyProperties,
         }
         path = os.path.join(ADMIN_TEMPLATE_DIR, 'model_item_edit.html')
@@ -322,8 +321,8 @@ class Admin(BaseRequestHandler):
             # else:
                 # attributes[field.name] = data_type(self.request.get(field.name))
         # item = modelAdmin.model(**attributes)
-        
-        form = modelAdmin.AdminForm(data = self.request.POST)
+
+        form = modelAdmin.AdminForm(urlPrefix = self.urlPrefix, data = self.request.POST)
         if form.is_valid():
         # Save the data, and redirect to the edit page
             item = form.save(commit=False)
@@ -385,7 +384,7 @@ class Admin(BaseRequestHandler):
             'urlPrefix': self.urlPrefix,
             'item' : item,
             'moduleTitle': modelAdmin.modelName,
-            'editForm': modelAdmin.AdminForm(instance = item),
+            'editForm': modelAdmin.AdminForm(urlPrefix = self.urlPrefix, instance = item),
             'readonlyProperties': self._readonlyPropsWithValues(item, modelAdmin),
         }
         path = os.path.join(ADMIN_TEMPLATE_DIR, 'model_item_edit.html')
@@ -417,8 +416,8 @@ class Admin(BaseRequestHandler):
                             # {'metaFieldName': metaFieldName, 'propertyName' : field.name, 'modelName': modelAdmin.modelName}
                         # )
             # setattr(item, field.name, value)
-        
-        form = modelAdmin.AdminForm(data=self.request.POST, instance=item)
+
+        form = modelAdmin.AdminForm(urlPrefix = self.urlPrefix, data = self.request.POST, instance = item)
         if form.is_valid():
         # Save the data, and redirect to the edit page
             item = form.save(commit=False)
@@ -446,8 +445,8 @@ class Admin(BaseRequestHandler):
         item = self._safeGetItem(modelAdmin.model, key)
         item.delete()
         self.redirect("%s/%s/list/" % (self.urlPrefix, modelAdmin.modelName))
-    
-    @authorized.role("admin")    
+
+    @authorized.role("admin")
     def get_blob_contents(self, modelName, fieldName, key):
         """Returns blob field contents to user for downloading.
         """
