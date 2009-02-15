@@ -1,6 +1,9 @@
 import logging
+
 from google.appengine.ext.db import djangoforms
+from google.appengine.api import datastore_errors
 import django.newforms as forms
+
 from . import admin_widgets
 
 
@@ -64,3 +67,22 @@ def createAdminForm(formModel, editFields, editProps):
                 help_text = old.help_text
             )
     return AdminForm
+
+
+### HACK HACK HACK ###
+# djangoforms.ReferenceProperty.get_value_for_form() does not catch the error that occurs
+# when referenved item is deleted.
+# This "monkey patch" fixes the problem.
+def wrapped_get_value_for_form(self, instance):
+    """Catch "ReferenceProperty failed to be resolved" error and return None.
+    """
+    try:
+        return old_get_value_for_form(self, instance)
+    except datastore_errors.Error, exc:
+        # Error is raised if referenced property is deleted
+        # Catch the exception and set value to none
+        logging.warning('Error catched while getting item values: %s' % exc)
+        return  None
+
+old_get_value_for_form = djangoforms.ReferenceProperty.get_value_for_form
+djangoforms.ReferenceProperty.get_value_for_form = wrapped_get_value_for_form

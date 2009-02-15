@@ -9,7 +9,6 @@ from google.appengine.ext import db
 from google.appengine.api import datastore_errors
 from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
-from google.appengine.api import datastore_errors
 
 from . import authorized
 from . import admin_widgets
