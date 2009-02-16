@@ -3,6 +3,7 @@ import logging
 from google.appengine.ext.db import djangoforms
 from google.appengine.api import datastore_errors
 import django.newforms as forms
+from django.newforms.util import ValidationError
 
 from . import admin_widgets
 
@@ -68,6 +69,40 @@ def createAdminForm(formModel, editFields, editProps):
             )
     return AdminForm
 
+
+class FileField(forms.fields.Field):
+    widget = admin_widgets.FileInput
+    error_messages = {
+        'invalid': u"No file was submitted. Check the encoding type on the form.",
+        'missing': u"No file was submitted.",
+        'empty': u"The submitted file is empty.",
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(FileField, self).__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        super(FileField, self).clean(initial or data)
+        if not self.required and data in forms.fields.EMPTY_VALUES:
+            return None
+        elif not data and initial:
+            return initial
+
+        # UploadedFile objects should have name and size attributes.
+        try:
+            file_name = data.name
+            file_size = data.size
+        except AttributeError:
+            raise ValidationError(self.error_messages['invalid'])
+
+        if not file_name:
+            raise ValidationError(self.error_messages['invalid'])
+        if not file_size:
+            raise ValidationError(self.error_messages['empty'])
+
+        return data
+forms.fields.FileField = FileField
+forms.FileField = FileField
 
 ### HACK HACK HACK ###
 # djangoforms.ReferenceProperty.get_value_for_form() does not catch the error that occurs

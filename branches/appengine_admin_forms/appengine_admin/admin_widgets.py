@@ -14,6 +14,24 @@ class ReferenceSelect(forms.widgets.Select):
         return output + u'\n<a href="%s/%s/new/" target="_blank">Add new</a>' % (self.urlPrefix, self.referenceKind)
 
 
+class FileInput(forms.widgets.Input):
+    input_type = 'file'
+    needs_multipart_form = True
+
+    def render(self, name, value, attrs=None):
+        return super(FileInput, self).render(name, None, attrs=attrs)
+
+    def value_from_datadict(self, data, name):
+        "File widgets take data from FILES, not POST"
+        return data.get(name, None)
+
+    def _has_changed(self, initial, data):
+        if data is None:
+            return False
+        return True
+
+
+
 ### These are taken from Django 1.0 contrib.admin.widgets
 class AdminDateWidget(forms.TextInput):
     def __init__(self, attrs={}):
