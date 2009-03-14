@@ -11,11 +11,8 @@
 {% endif %}
 <!-- Editable properties -->
 <form name="adminEditForm" method="post"
-    action="{{ urlPrefix }}/{{moduleTitle}}/{% if item %}edit/{{ item.key }}{% else %}new{% endif %}/"
-    {% for field in editProperties %}{% ifequal field.typeName "BlobProperty" %}
-    enctype="multipart/form-data"
-    {% endifequal %}{% endfor %}
-    >
+    action="{{ urlPrefix }}/{{ moduleTitle }}/{% if item %}edit/{{ item.key }}{% else %}new{% endif %}/"
+    {% if editForm.enctype %}enctype="{{ editForm.enctype }}"{% endif %}>
 <table class="editForm">
     <tr>
         <td colspan="2"><h3>Editable properties</h3></td>
