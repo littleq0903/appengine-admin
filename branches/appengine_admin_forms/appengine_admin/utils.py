@@ -14,6 +14,11 @@ def getBlobProperties(item, fieldName):
     else:
         return None
 
+class Http404(Exception):
+    code = 404
+
+class Http500(Exception):
+    code = 500
 
 class Page(object):
     def __init__(self, modelAdmin, itemsPerPage = 20, currentPage = 1):

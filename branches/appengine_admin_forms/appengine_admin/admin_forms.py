@@ -142,6 +142,11 @@ class FileField(forms.fields.Field):
         self.file_name = None
         self.file_size = None
         self.file_type = None
+        self.__args = args
+        self.__kwargs = kwargs
+
+    def __copy__(self):
+        return FileField(*self.__args, **self.__kwargs)
 
     def clean(self, data, initial=None):
         super(FileField, self).clean(initial or data)
