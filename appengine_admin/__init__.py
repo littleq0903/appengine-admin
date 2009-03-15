@@ -3,7 +3,6 @@ import logging
 import copy
 import re
 import math
-import pickle
 
 from google.appengine.ext import db
 from google.appengine.api import datastore_errors
@@ -13,15 +12,12 @@ from google.appengine.ext import webapp
 from . import authorized
 from . import admin_widgets
 from . import admin_forms
+from . import utils
+from . import admin_settings
 
-# Path to admin template directory
-# Overwrite this variable if you want to use custom templates
-ADMIN_TEMPLATE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'templates')
 
-ADMIN_ITEMS_PER_PAGE = 50
-
-BLOB_FIELD_META_SUFFIX = '_meta'
-
+ADMIN_TEMPLATE_DIR = admin_settings.ADMIN_TEMPLATE_DIR
+ADMIN_ITEMS_PER_PAGE = admin_settings.ADMIN_ITEMS_PER_PAGE
 
 class Http404(Exception):
     code = 404
@@ -110,7 +106,7 @@ class ModelAdmin(object):
             try:
                 prop.value = getattr(item, prop.name)
                 if prop.typeName == 'BlobProperty':
-                    prop.meta = _getBlobProperties(item, prop.name)
+                    prop.meta = utils.getBlobProperties(item, prop.name)
                     if prop.value:
                         prop.value = True # release the memory
             except datastore_errors.Error, exc:
@@ -226,7 +222,7 @@ class Admin(BaseRequestHandler):
             readonlyProperties[i].value = itemValue
             if readonlyProperties[i].typeName == 'BlobProperty':
                 logging.info("%s :: Binary content" % readonlyProperties[i].name)
-                readonlyProperties[i].meta = _getBlobProperties(item, readonlyProperties[i].name)
+                readonlyProperties[i].meta = utils.getBlobProperties(item, readonlyProperties[i].name)
                 if readonlyProperties[i].value:
                     readonlyProperties[i].value = True # release the memory
             else:
@@ -288,44 +284,10 @@ class Admin(BaseRequestHandler):
         """Create new record of particular model
         """
         modelAdmin = getModelAdmin(modelName)
-        # attributes = {}
-        # for field in modelAdmin._editProperties:
-            # logging.info("Property: %s" % field.name)
-            # # detect preferred data type of property
-            # data_type = field.prop.data_type
-            # logging.info("Property type: %s" % data_type)
-            # # Since basestring can not be directly instantiated use unicode everywhere
-            # # Not yet decided what to do if non unicode data received.
-            # if data_type is basestring:
-                # data_type = unicode
-            # if field.typeName == 'BlobProperty':
-                # data_type = str
-                # metaFieldName = field.name + BLOB_FIELD_META_SUFFIX
-                # if getattr(modelAdmin.model, metaFieldName, None):
-                    # uploadedFile = self.request.POST.get(field.name)
-                    # if uploadedFile != u'':
-                        # metaData = {
-                            # 'Content_Type': uploadedFile.type,
-                            # 'File_Name': uploadedFile.filename
-                        # }
-                        # logging.info("Caching meta data for BlobProperty: %r" % metaData)
-                        # attributes[field.name + BLOB_FIELD_META_SUFFIX] = pickle.dumps(metaData)
-                # else:
-                    # logging.info(
-                        # 'Cache field "%(metaFieldName)s" for blob property "%(propertyName)s" not found. Add field "%(metaFieldName)s" to model "%(modelName)s" if you want to store meta info about the uploaded file',
-                        # {'metaFieldName': metaFieldName, 'propertyName' : field.name, 'modelName': modelAdmin.modelName}
-                    # )
-            # if issubclass(data_type, db.Model):
-                # attributes[field.name] = data_type.get(self.request.get(field.name))
-            # else:
-                # attributes[field.name] = data_type(self.request.get(field.name))
-        # item = modelAdmin.model(**attributes)
-
         form = modelAdmin.AdminForm(urlPrefix = self.urlPrefix, data = self.request.POST)
         if form.is_valid():
         # Save the data, and redirect to the edit page
-            item = form.save(commit=False)
-            item.put()
+            item = form.save()
             self.redirect("%s/%s/edit/%s/" % (self.urlPrefix, modelAdmin.modelName, item.key()))
         else:
             # Display errors with entered values
@@ -347,37 +309,6 @@ class Admin(BaseRequestHandler):
         """
         modelAdmin = getModelAdmin(modelName)
         item = self._safeGetItem(modelAdmin.model, key)
-        # editProperties = copy.deepcopy(modelAdmin._editProperties)
-        # readonlyProperties = copy.deepcopy(modelAdmin._readonlyProperties)
-        # for i in range(len(editProperties)):
-            # try:
-                # itemValue = getattr(item, editProperties[i].name)
-            # except datastore_errors.Error, exc:
-                # # Error is raised if referenced property is deleted
-                # # Catch the exception and set value to none
-                # logging.warning('Error catched while getting list item values: %s' % exc)
-                # itemValue = None
-            # editProperties[i].value = itemValue
-            # if editProperties[i].typeName == 'BlobProperty':
-                # logging.info("%s :: Binary content" % editProperties[i].name)
-                # editProperties[i].meta = _getBlobProperties(item, editProperties[i].name)
-                # if editProperties[i].value:
-                    # editProperties[i].value = True # release the memory
-            # else:
-                # logging.info("%s :: %s" % (editProperties[i].name, editProperties[i].value))
-            # if editProperties[i].typeName == 'ReferenceProperty':
-                # editProperties[i].referencedItems = editProperties[i].prop.reference_class.all()
-        # for i in range(len(readonlyProperties)):
-            # itemValue = getattr(item, readonlyProperties[i].name)
-            # readonlyProperties[i].value = itemValue
-            # if readonlyProperties[i].typeName == 'BlobProperty':
-                # logging.info("%s :: Binary content" % readonlyProperties[i].name)
-                # readonlyProperties[i].meta = _getBlobProperties(item, readonlyProperties[i].name)
-                # if readonlyProperties[i].value:
-                    # readonlyProperties[i].value = True # release the memory
-            # else:
-                # logging.info("%s :: %s" % (readonlyProperties[i].name, readonlyProperties[i].value))
-
         templateValues = {
             'models': self.models,
             'urlPrefix': self.urlPrefix,
@@ -396,31 +327,10 @@ class Admin(BaseRequestHandler):
         """
         modelAdmin = getModelAdmin(modelName)
         item = self._safeGetItem(modelAdmin.model, key)
-        # for field in modelAdmin._editProperties:
-            # if field.typeName == 'BlobProperty':
-                # data_type = str
-                # uploadedFile = self.request.POST.get(field.name)
-                # if uploadedFile != u'':
-                    # metaFieldName = field.name + BLOB_FIELD_META_SUFFIX
-                    # if getattr(modelAdmin.model, metaFieldName, None):
-                        # metaData = {
-                            # 'Content_Type': uploadedFile.type,
-                            # 'File_Name': uploadedFile.filename
-                        # }
-                        # logging.info("Caching meta data for BlobProperty: %r" % metaData)
-                        # setattr(item, metaFieldName, pickle.dumps(metaData))
-                    # else:
-                        # logging.info(
-                            # 'Cache field "%(metaFieldName)s" for blob property "%(propertyName)s" not found. Add field "%(metaFieldName)s" to model "%(modelName)s" if you want to store meta info about the uploaded file',
-                            # {'metaFieldName': metaFieldName, 'propertyName' : field.name, 'modelName': modelAdmin.modelName}
-                        # )
-            # setattr(item, field.name, value)
-
         form = modelAdmin.AdminForm(urlPrefix = self.urlPrefix, data = self.request.POST, instance = item)
         if form.is_valid():
         # Save the data, and redirect to the edit page
-            item = form.save(commit=False)
-            item.put()
+            item = form.save()
             self.redirect("%s/%s/edit/%s/" % (self.urlPrefix, modelAdmin.modelName, item.key()))
         else:
             templateValues = {
@@ -455,7 +365,7 @@ class Admin(BaseRequestHandler):
         if data is None:
             raise Http404()
         else:
-            props = _getBlobProperties(item, fieldName)
+            props = utils.getBlobProperties(item, fieldName)
             if props:
                 self.response.headers['Content-Type'] = props['Content_Type']
                 self.response.headers['Content-Disposition'] = 'inline; filename=%s' % props['File_Name']
@@ -526,10 +436,3 @@ def getModelAdmin(modelName):
         return _modelRegister[modelName]
     except KeyError:
         raise Http404()
-
-def _getBlobProperties(item, fieldName):
-    props = getattr(item, fieldName + BLOB_FIELD_META_SUFFIX, None)
-    if props:
-        return pickle.loads(props)
-    else:
-        return None
