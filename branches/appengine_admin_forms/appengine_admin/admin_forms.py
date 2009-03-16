@@ -4,6 +4,7 @@ import copy
 
 from google.appengine.ext.db import djangoforms
 from google.appengine.api import datastore_errors
+from google.appengine.ext import db
 import django.newforms as forms
 from django.newforms.util import ValidationError
 
@@ -89,7 +90,6 @@ def createAdminForm(formModel, editFields, editProps):
     # Adjust widgets by widget type
     logging.info("Ajusting widgets for AdminForm")
     for fieldName, field in AdminForm.base_fields.items():
-        logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
         if isinstance(field.widget, forms.widgets.Textarea):
             logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
             field.widget.attrs.update({'rows': '15', 'cols': '40', 'class': 'adminTextarea'})
@@ -193,3 +193,101 @@ def _wrapped_get_value_for_form(self, instance):
 
 _original_get_value_for_form = djangoforms.ReferenceProperty.get_value_for_form
 djangoforms.ReferenceProperty.get_value_for_form = _wrapped_get_value_for_form
+
+
+class ModelMultipleChoiceField(forms.MultipleChoiceField):
+    default_error_messages = {
+        'invalid_choice': _(u'Please select a valid choice. '
+            u'That choice is not one of the available choices.'),
+    }
+
+    def __init__(self, reference_class, query=None, choices=None,
+            required=True, widget=admin_widgets.SelectMultiple, label=None, initial=None,
+                help_text=None, *args, **kwargs):
+        """Constructor.
+
+        Args:
+          reference_class: required; the db.Model subclass used in the reference
+          query: optional db.Query; default db.Query(reference_class)
+          choices: optional explicit list of (value, label) pairs representing
+            available choices; defaults to dynamically iterating over the
+            query argument (or its default)
+          required, widget, label, initial, help_text, *args, **kwargs:
+            like for forms.Field.__init__(); widget defaults to forms.SelectMultiple
+        """
+        assert issubclass(reference_class, db.Model)
+        if query is None:
+            query = db.Query(reference_class)
+        assert isinstance(query, db.Query)
+        self.reference_class = reference_class
+        self._query = query
+        self._choices = choices
+        super(ModelMultipleChoiceField, self).__init__(choices, required, widget, label, initial,
+                help_text, *args, **kwargs)
+        self._update_widget_choices()
+
+    def _update_widget_choices(self):
+        """Helper to copy the choices to the widget."""
+        logging.info("WIDGET: %s" % repr(self.widget))
+        logging.info("CHOICES: %s" % repr(self.widget.choices))
+        self.widget.choices = self.choices
+
+
+    def _get_query(self):
+        """Getter for the query attribute."""
+        return self._query
+
+    def _set_query(self, query):
+        """Setter for the query attribute.
+        As a side effect, the widget's choices are updated.
+        """
+        self._query = query
+        self._update_widget_choices()
+
+    query = property(_get_query, _set_query)
+
+    def _generate_choices(self):
+        """Generator yielding (key, label) pairs from the query results.
+        """
+        logging.info("QUERY: %s" % repr(self._query))
+        for inst in self._query:
+            logging.info("K: %s V: %s" % (inst.key(), unicode(inst)))
+            yield (inst.key(), unicode(inst))
+
+
+    def _get_choices(self):
+        """Getter for the choices attribute.
+
+        This is required to return an object that can be iterated over
+        multiple times.
+        """
+        if self._choices is not None:
+            return self._choices
+        return djangoforms._WrapIter(self._generate_choices)
+
+    def _set_choices(self, choices):
+        """Setter for the choices attribute.
+                As a side effect, the widget's choices are updated.
+        """
+        self._choices = choices
+        self._update_widget_choices()
+
+    choices = property(_get_choices, _set_choices)
+
+    def clean(self, value):
+        """Override Field.clean() to do reference-specific value cleaning.
+        """
+        value = super(ModelMultipleChoiceField, self).clean(value)
+        new_value = []
+        logging.info("VALUE: %s" % repr(value))
+        for item in value:
+            if isinstance(item, basestring):
+                logging.info("LOL!L!L!L!!L!L!L")
+                item = db.Key(item)
+            if isinstance(item, self.reference_class):
+                item = item.key()
+            if not isinstance(item, db.Key):
+                raise db.BadValueError('Value must be a key or of type %s' %
+                                       self.reference_class.__name__)
+            new_value.append(item)
+        return new_value

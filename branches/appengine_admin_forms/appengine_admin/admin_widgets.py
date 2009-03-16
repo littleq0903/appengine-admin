@@ -1,3 +1,4 @@
+from webob.multidict import UnicodeMultiDict
 import django.newforms as forms
 
 class ReferenceSelect(forms.widgets.Select):
@@ -84,3 +85,11 @@ class AdminSplitDateTime(forms.SplitDateTimeWidget):
     def format_output(self, rendered_widgets):
         return u'<p class="datetime">%s %s<br />%s %s</p>' % \
             ('Date:', rendered_widgets[0], 'Time:', rendered_widgets[1])
+
+class SelectMultiple(forms.SelectMultiple):
+    def value_from_datadict(self, data, name):
+        import logging
+        logging.info("VALUE: %s" % data)
+        if isinstance(data, UnicodeMultiDict):
+            return data.getall(name)
+        return data.get(name, None)
