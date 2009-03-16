@@ -2,6 +2,7 @@ import logging
 import copy
 
 from google.appengine.api import datastore_errors
+from google.appengine.ext import db
 
 from . import admin_forms
 from . import utils
@@ -82,6 +83,13 @@ class ModelAdmin(object):
                     prop.meta = utils.getBlobProperties(item, prop.name)
                     if prop.value:
                         prop.value = True # release the memory
+                if prop.typeName == 'ManyToManyProperty':
+                    # Show pretty list of referenced items.
+                    # Show 'None' in place of missing items
+                    new_value_list = []
+                    for key in prop.value:
+                        new_value_list.append(str(db.get(key)))
+                    prop.value = ', '.join(new_value_list)
             except datastore_errors.Error, exc:
                 # Error is raised if referenced property is deleted
                 # Catch the exception and set value to none
