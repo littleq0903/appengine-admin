@@ -1,8 +1,9 @@
 ﻿from google.appengine.ext import db
-from appengine_admin.db_extensions import ManyToManyProperty
+from appengine_admin.db_extensions import ManyToManyProperty, StringListChoicesProperty
 
 
 choices = ['one', 'two', 'three', 'four']
+uchoices = [u'one', u'two', u'three', u'four']
 
 # Models
 class ReferencedModel(db.Model):
@@ -34,6 +35,8 @@ class TestModel(db.Model):
     phoneNumberField = db.PhoneNumberProperty("Phone number field")
     postalAddressField = db.PostalAddressProperty("Postal address field")
     ratingField = db.RatingProperty("Rating field")
+    strListField = db.StringListProperty("String list field")
+    strListChoicesField = StringListChoicesProperty("Stringlist field with choices", choices = uchoices)
     whencreated = db.DateTimeProperty("Created", auto_now_add = True)
     whenupdated = db.DateTimeProperty("Updated", auto_now = True)
 

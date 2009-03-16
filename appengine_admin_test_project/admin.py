@@ -42,7 +42,9 @@ class AdminTestModel(appengine_admin.ModelAdmin):
         'imField',
         'phoneNumberField',
         'postalAddressField',
-        'ratingField')
+        'ratingField',
+        'strListField',
+        'strListChoicesField',)
     readonlyFields = ('whencreated', 'whenupdated')
     listGql = 'order by stringField, integerField'
 
