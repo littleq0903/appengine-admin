@@ -26,6 +26,7 @@
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateTimeProperty DateTimeProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#DateProperty DateProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#TimeProperty TimeProperty]
+    * [http://code.google.com/appengine/docs/python/datastore/typesandpropertyclasses.html#StringListProperty StringListProperty]
   * Not tested but should be usable without additional patches:
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#UserProperty UserProperty]
   * These property types have custom widgets:
@@ -39,4 +40,6 @@
   * These property types need some additional work in Appengine Admin to be really usable:
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#SelfReferenceProperty SelfReferenceProperty]
     * [http://code.google.com/appengine/docs/datastore/typesandpropertyclasses.html#GeoPtProperty GeoPtProperty]
-    * [http://code.google.com/appengine/docs/python/datastore/typesandpropertyclasses.html#StringListProperty StringListProperty]
+  * Custom properties (from appengine_admin.db_extensions)
+    * !ManyToManyProperty
+    * !StringListChoicesProperty
