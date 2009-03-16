@@ -10,6 +10,9 @@ class Utf8ReferencedModel(db.Model):
 
     @encoded_str_utf8
     def __str__(self):
+        return self.__unicode__()
+        
+    def __unicode__(self):
         return u"Glāžšķūņu rūķīši %s" % self.name
 
 class Utf8TestModel(db.Model):

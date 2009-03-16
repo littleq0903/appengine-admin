@@ -14,6 +14,7 @@ class AdminTestModel(appengine_admin.ModelAdmin):
         'referenceField',
         'dateField',
         'timeField',
+        'datetimeField',
         'userField',
         'categoryField',
         'linkField',
@@ -33,6 +34,7 @@ class AdminTestModel(appengine_admin.ModelAdmin):
         'referenceField',
         'dateField',
         'timeField',
+        'datetimeField',
         'userField',
         'categoryField',
         'linkField',
@@ -96,6 +98,11 @@ class AdminDerivedTestModel3(appengine_admin.ModelAdmin):
     editFields = ('stringField', 'textField', 'booleanField')
     readonlyFields = ('whencreated', 'whenupdated')
 
+class AdminManyToManyTestModel(appengine_admin.ModelAdmin):
+    model = models.ManyToManyTestModel
+    listFields = ('name', 'manyToManyRef')
+    editFields = ('name', 'manyToManyRef')
+    
 appengine_admin.register(
     AdminTestModel,
     AdminReferencedModel,
@@ -104,4 +111,5 @@ appengine_admin.register(
     AdminDerivedTestModel,
     AdminDerivedTestModel2,
     AdminDerivedTestModel3,
+    AdminManyToManyTestModel,
 )
