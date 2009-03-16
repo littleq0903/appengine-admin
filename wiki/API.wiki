@@ -34,6 +34,7 @@ Available settings:
   * editFields - list of field names that that should be used as editable fields in admin interface
   * readonlyFields - list of field names that should be used as read-only fields in admin interface
   * listGql - GQL statement for record ordering/filtering/whatever_else in list view
+  * !AdminForm - custom form (should be derived from django.forms.Form)
 
 Sample usage:
 {{{
@@ -187,3 +188,21 @@ class ModelWithBlobs(db.Model):
     blobField_meta = db.BlobProperty()
 }}}
 If you don't add this extra field or meta information can not be retrieved for some reason the file MIME type will be set to `application/octet-stream` when you will try to download the file.
+
+== !ManyToManyProperty ==
+!ManyToManyProperty simulates !ManyToManyProperty from Django by using Appengine's !ListProperty.
+
+Sample usage:
+{{{
+from appengine_admin.db_extensions import ManyToManyProperty 
+
+class Tag(db.Model):
+    name = db.StringProperty("Name")
+
+class Article(db.Model):
+    title = db.StringProperty("Title", required = True)
+    content = db.TextProperty("Content", required = True)
+    tags = ManyToManyProperty(Tag, verbose_name = "Tag cloud")
+}}}
+
+Admin interface will show !SelectMultiple widget for !ManyToManyProperty
