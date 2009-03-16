@@ -46,6 +46,7 @@ class ModelAdmin(object):
     editFields = ()
     readonlyFields = ()
     listGql = ''
+    AdminForm = None
 
     def __init__(self):
         super(ModelAdmin, self).__init__()
@@ -58,11 +59,12 @@ class ModelAdmin(object):
         self._extractProperties(self.listFields, self._listProperties)
         self._extractProperties(self.editFields, self._editProperties)
         self._extractProperties(self.readonlyFields, self._readonlyProperties)
-        self.AdminForm = admin_forms.createAdminForm(
-            formModel = self.model,
-            editFields = self.editFields,
-            editProps = self._editProperties
-        )
+        if self.AdminForm is None:
+            self.AdminForm = admin_forms.createAdminForm(
+                formModel = self.model,
+                editFields = self.editFields,
+                editProps = self._editProperties
+            )
 
     def _extractProperties(self, fieldNames, storage):
         for propertyName in fieldNames:
