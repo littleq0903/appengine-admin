@@ -250,9 +250,7 @@ class ModelMultipleChoiceField(forms.MultipleChoiceField):
     def _generate_choices(self):
         """Generator yielding (key, label) pairs from the query results.
         """
-        logging.info("QUERY: %s" % repr(self._query))
         for inst in self._query:
-            logging.info("K: %s V: %s" % (inst.key(), unicode(inst)))
             yield (inst.key(), unicode(inst))
 
 
@@ -280,10 +278,8 @@ class ModelMultipleChoiceField(forms.MultipleChoiceField):
         """
         value = super(ModelMultipleChoiceField, self).clean(value)
         new_value = []
-        logging.info("VALUE: %s" % repr(value))
         for item in value:
             if isinstance(item, basestring):
-                logging.info("LOL!L!L!L!!L!L!L")
                 item = db.Key(item)
             if isinstance(item, self.reference_class):
                 item = item.key()
