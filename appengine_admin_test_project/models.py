@@ -1,4 +1,5 @@
 ﻿from google.appengine.ext import db
+from appengine_admin.db_extensions import ManyToManyProperty
 
 
 choices = ['one', 'two', 'three', 'four']
@@ -57,3 +58,7 @@ class BaseTestModel2(db.Model):
 
 class DerivedTestModel3(BaseTestModel2, DerivedTestModel2):
     pass
+
+class ManyToManyTestModel(db.Model):
+    name = db.StringProperty("Name")
+    manyToManyRef = ManyToManyProperty(ReferencedModel, verbose_name = "Many to many reference")
