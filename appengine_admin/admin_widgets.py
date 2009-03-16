@@ -88,8 +88,6 @@ class AdminSplitDateTime(forms.SplitDateTimeWidget):
 
 class SelectMultiple(forms.SelectMultiple):
     def value_from_datadict(self, data, name):
-        import logging
-        logging.info("VALUE: %s" % data)
         if isinstance(data, UnicodeMultiDict):
             return data.getall(name)
         return data.get(name, None)

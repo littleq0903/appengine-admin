@@ -1,6 +1,7 @@
 import logging
 import pickle
 import copy
+import datetime
 
 from google.appengine.ext.db import djangoforms
 from google.appengine.api import datastore_errors
@@ -96,7 +97,7 @@ def createAdminForm(formModel, editFields, editProps):
         if isinstance(field.widget, forms.widgets.TextInput):
             logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
             field.widget.attrs.update({'class': 'adminTextInput'})
-        if isinstance(field.widget, forms.widgets.Select):
+        if isinstance(field, djangoforms.ModelChoiceField):
             logging.info("  Adjusting field: %s; widget: %s" % (fieldName, field.widget.__class__))
             # Use custom widget with link "Add new" near dropdown box
             field.widget = admin_widgets.ReferenceSelect(
@@ -118,7 +119,7 @@ def createAdminForm(formModel, editFields, editProps):
             AdminForm.base_fields[prop.name].widget = admin_widgets.AdminTimeWidget()
         if prop.typeName == 'DateTimeProperty':
             old = AdminForm.base_fields[prop.name]
-            AdminForm.base_fields[prop.name] = forms.fields.SplitDateTimeField(
+            AdminForm.base_fields[prop.name] = SplitDateTimeField(
                 required = old.required,
                 widget = admin_widgets.AdminSplitDateTime,
                 label = old.label,
@@ -291,3 +292,11 @@ class ModelMultipleChoiceField(forms.MultipleChoiceField):
                                        self.reference_class.__name__)
             new_value.append(item)
         return new_value
+
+class SplitDateTimeField(forms.fields.SplitDateTimeField):
+    def compress(self, data_list):
+        """Checks additionaly if all necessary data is supplied
+        """
+        if data_list and None not in data_list:
+            return datetime.datetime.combine(*data_list)
+        return None
