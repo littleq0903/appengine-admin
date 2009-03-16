@@ -28,7 +28,7 @@ class AdminTestModel(appengine_admin.ModelAdmin):
     editFields = (
         'stringField',
         'textField',
-#        'choicesField',
+        'choicesField',
         'integerField',
         'booleanField',
         'referenceField',
