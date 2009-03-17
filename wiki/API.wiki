@@ -119,7 +119,7 @@ appengine_admin.register(AdminArticle)
 
 = Tips and tricks =
 == String represenatation of model instances ==
-Define `__str__` method for your model classes as Appengine Admin uses it when displaying choices for referenced field in _edit_ and _new_ views.
+Define `__unicode__ ` method for your model classes to make model instances displayed in human readable format in Appengine Admin user interface.
 
 Sample usage:
 {{{
@@ -129,30 +129,8 @@ class Article(db.Model):
     title = db.StringProperty("Title", required = True)
     content = db.TextProperty("Content", required = True)
 
-    def __str__(self):
-        return str(self.title)
-}}}
-
-If your model's `__str__` method returns text in different encoding than system's default (e.g., latin-1) then use decorator `encoded_str_utf8` for UTF-8 data or `encoded_str(encoding='encoding_name')` for any other encoding.
-
-Sample usage:
-{{{
-from google.appengine.ext import db
-from appengine_admin.encoding import encoded_str, encoded_str_utf8
-
-class ReferencedModel(db.Model):
-    name = db.StringProperty("Name", required = True) # Contains UTF-8 encoded text
-   
-    @encoded_str_utf8
-    def __str__(self):
-        return self.name
-
-class AnotherReferencedModel(d
-    name = db.StringProperty("Name", required = True) # Contains Windows-1257 encoded text
-   
-    @encoded_str(encoding = 'windows-1257')
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return self.title
 }}}
 
 == verbose_name ==
