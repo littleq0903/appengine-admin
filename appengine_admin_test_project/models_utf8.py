@@ -8,10 +8,6 @@ class Utf8ReferencedModel(db.Model):
     whencreated = db.DateTimeProperty("Created", auto_now_add = True)
     whenupdated = db.DateTimeProperty("Updated", auto_now = True)
 
-    @encoded_str_utf8
-    def __str__(self):
-        return self.__unicode__()
-        
     def __unicode__(self):
         return u"Glāžšķūņu rūķīši %s" % self.name
 
