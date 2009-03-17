@@ -1,0 +1,16 @@
+#summary News and events regarding Appengine Admin.
+#labels Featured
+
+= Appengine Admin Web Log =
+
+== 16.03.2009 :: !StringListChoicesProperty ==
+Added new custom property !StringListChoicesProperty.
+Take a look in [API] documentation for usage instructions.
+
+== 16.03.2009 :: Migration to Django forms framework (django.newforms) completed ==
+Issue #13 is fixed. Appengine Admin will be much more customizable and easier to maintain from now.
+
+== 16.03.2009 :: !BlobProperty ==
+Custom property !BlobProperty added.
+Most of the implementation comes from [http://code.google.com/p/django-gae-helpers/ django-gae-helpers]
+Take a look in [API] documentation for usage instructions.
